@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  web-carrinho:
+    image: node
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: npm start
+    environment:
+      SERVER_PORT: 3000
+      MONGO_URL: "mongodb://carrinho-usuario:carrinho-senha@mongo-carrinho:27017/carrinho?authSource=admin"
+      RABBITMQ_HOST: 'rabbitmq'
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+    ports:
+      - 3000:3000
+    depends_on:
+      - rabbitmq
+      - mongo-carrinho
+
+  mongo-carrinho:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: carrinho-usuario
+      MONGO_INITDB_ROOT_PASSWORD: carrinho-senha
+      MONGO_INITDB_DATABASE: carrinho
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - 5672:5672
