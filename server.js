@@ -4,11 +4,6 @@ import app from "./src/app.js"
 // https://stackoverflow.com/questions/61401475/why-is-type-module-in-package-json-file
 // https://www.alura.com.br/artigos/guia-importacao-exportacao-modulos-javascript
 
-
-// import 'dotenv/config'
-// console.log(process.env.db_username)
-// console.log(process.env.db_password)
-
 const PORT = 3000;
 
 app.listen(PORT, () => {
