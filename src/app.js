@@ -11,20 +11,10 @@ conexao.on("error", (erro) => {
 conexao.once("open", () => {
     console.log("Conectado com o mongo")
 })
-
+// Verificar bd
+// https://cloud.mongodb.com/v2#/org/6795befcadf5607dc9f75200/projects
 const app = express()
 rotas(app)
-
-// app.get("/produtos/:id", (req,res,next) => {
-//     const index = buscarProduto(req.params.id)
-//     res.status(200).json(produtos[index])
-// })
-
-// app.put("/produtos/:id", (req,res,next) => {
-//     const index = buscarProduto(req.params.id)
-//     produtos[index].nome = req.body.nome
-//     res.status(200).json(produtos)
-// })
 
 // app.delete("/produtos/:id", (req,res,next) => {
 //     const index = buscarProduto(req.params.id)
