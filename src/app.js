@@ -1,6 +1,7 @@
 import express from "express"
 import conectarBD from "./config/dbconnect.js"
 import rotas from "./routes/index.js"
+import tratadorDeExceptions from "./middlewares/tratadorDeExceptions.js"
 
 const conexao = await conectarBD()
 
@@ -16,13 +17,8 @@ conexao.once("open", () => {
 const app = express()
 rotas(app)
 
-// app.delete("/produtos/:id", (req,res,next) => {
-//     const index = buscarProduto(req.params.id)
-//     if (index != -1) {
-//         produtos.splice(index, 1)
-//     }
-//     res.status(200).send("Produto removido")
-// })
+// middleware customizado para tratar erros:
+app.use(tratadorDeExceptions) 
 
 export default app
 

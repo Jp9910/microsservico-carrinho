@@ -1,20 +1,17 @@
 import modelCarrinho from "../models/carrinho.js"
-import cliente from "../models/cliente.js"
 import ClienteController from "./clienteController.js"
 
 class CarrinhoController {
-    static async listarCarrinhos(req, res) {
+    static async listarCarrinhos(req, res, next) {
         try {
             const listaCarrinhos = await modelCarrinho.carrinho.find({})
             res.status(200).json(listaCarrinhos)
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na requisição de carrinhos`,
-            })
+            next(erro)
         }
     }
 
-    static async cadastrarCarrinho(req, res) {
+    static async cadastrarCarrinho(req, res, next) {
         try {
             const novoCarrinho = await modelCarrinho.carrinho.create(req.body) //precisa remover o campo de cliente?
 
@@ -29,26 +26,27 @@ class CarrinhoController {
                 carrinho: novoCarrinho,
             })
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha ao cadastrar carrinho`,
-            })
+            next(erro)
         }
     }
 
-    static async listarCarrinhoPorId(req, res) {
+    static async listarCarrinhoPorId(req, res, next) {
+        let carrinhoEncontrado = null
         try {
-            const carrinhoEncontrado = await modelCarrinho.carrinho.findById(
+            carrinhoEncontrado = await modelCarrinho.carrinho.findById(
                 req.params.id
             )
+            if (carrinhoEncontrado == null) {
+                res.status(400).json("Carrinho não encontrado com este ID")
+                return
+            }
             res.status(200).json(carrinhoEncontrado)
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na requisição de carrinho por id`,
-            })
+            next(erro)
         }
     }
 
-    static async atualizarCarrinho(req, res) {
+    static async atualizarCarrinho(req, res, next) {
         try {
             const carrinhoAntesDeAtualizar =
                 await modelCarrinho.carrinho.findByIdAndUpdate(
@@ -67,13 +65,11 @@ class CarrinhoController {
                 carrinho: carrinhoAntesDeAtualizar,
             })
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na atualização de carrinho`,
-            })
+            next(erro)
         }
     }
 
-    static async removerCarrinho(req, res) {
+    static async removerCarrinho(req, res, next) {
         try {
             const carrinhoRemovido =
                 await modelCarrinho.carrinho.findByIdAndDelete(req.params.id)
@@ -82,9 +78,7 @@ class CarrinhoController {
                 carrinho: carrinhoRemovido,
             })
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na remoção de carrinho`,
-            })
+            next(erro)
         }
     }
 }
