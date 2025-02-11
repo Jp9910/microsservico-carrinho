@@ -5,7 +5,7 @@ import tratadorDeExceptions from "./middlewares/tratadorDeExceptions.js"
 
 const conexao = await conectarBD()
 
-conexao.on("error", (erro: any) => {
+conexao.on("error", (erro) => {
     console.error("Erro de conexão com o mongo", erro)
 })
 
