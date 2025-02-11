@@ -4,7 +4,7 @@ import app from "./src/app.js"
 // https://stackoverflow.com/questions/61401475/why-is-type-module-in-package-json-file
 // https://www.alura.com.br/artigos/guia-importacao-exportacao-modulos-javascript
 
-const PORT = 3000;
+const PORT = 3000
 
 app.listen(PORT, () => {
     console.log("Servidor escutando")

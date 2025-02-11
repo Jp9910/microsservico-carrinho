@@ -1,8 +1,9 @@
 # Carrinho
 
 Ferramentas usadas:
- - Nodejs
- - Express
+
+- Nodejs
+- Express
 
 ## Executar:
 
@@ -13,6 +14,7 @@ Ferramentas usadas:
 ##### Criar arquivo rabbitmq-container.env com
 
 ##### Iniciar compose
+
 > docker-compose up --build
 
 Acessar localhost:80

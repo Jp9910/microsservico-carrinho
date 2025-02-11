@@ -1,5 +1,5 @@
-import mongoose, {mongo} from "mongoose";
-import 'dotenv/config'
+import mongoose, { mongo } from "mongoose"
+import "dotenv/config"
 
 const db_name = process.env.db_name
 var connectionString = ""
@@ -11,7 +11,7 @@ if (process.env.db_location === "atlas") {
         "mongodb+srv://",
         user,
         ":",
-        password, 
+        password,
         "@cluster0.y8dl2.mongodb.net/",
         db_name,
         "?retryWrites=true&w=majority&appName=Cluster0"
