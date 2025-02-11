@@ -25,3 +25,6 @@ rotas(app)
 // })
 
 export default app
+
+// registro de usuário no express
+//https://medium.com/@ravipatel.it/building-a-secure-user-registration-and-login-api-with-express-js-mongodb-and-jwt-10b6f8f3741d
