@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 const carrinhoSchema = new mongoose.Schema(
     {
         id: { type: mongoose.Schema.Types.ObjectId },
+        idCliente: { type: mongoose.Schema.Types.String },
         produtos: { type: mongoose.Schema.Types.Array },
     },
     { versionKey: false }

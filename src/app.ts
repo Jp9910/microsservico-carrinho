@@ -5,7 +5,7 @@ import tratadorDeExceptions from "./middlewares/tratadorDeExceptions.js"
 
 const conexao = await conectarBD()
 
-conexao.on("error", (erro) => {
+conexao.on("error", (erro: any) => {
     console.error("Erro de conexão com o mongo", erro)
 })
 
@@ -18,7 +18,7 @@ const app = express()
 rotas(app)
 
 // middleware customizado para tratar erros:
-app.use(tratadorDeExceptions) 
+app.use(tratadorDeExceptions)
 
 export default app
 
