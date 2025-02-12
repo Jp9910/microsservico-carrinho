@@ -1,7 +1,10 @@
+import ErroNaoEncontrado from "../erros/ErroNaoEncontrado.js"
 import modelCarrinho from "../models/carrinho.js"
 import ClienteController from "./clienteController.js"
 
 class CarrinhoController {
+
+    // @route GET /carrinhos
     static async listarCarrinhos(req, res, next) {
         try {
             const listaCarrinhos = await modelCarrinho.carrinho.find({})
@@ -11,6 +14,7 @@ class CarrinhoController {
         }
     }
 
+    // @route POST /carrinhos
     static async cadastrarCarrinho(req, res, next) {
         try {
             const novoCarrinho = await modelCarrinho.carrinho.create(req.body) //precisa remover o campo de cliente?
@@ -30,6 +34,7 @@ class CarrinhoController {
         }
     }
 
+    // @route GET /carrinhos/:id
     static async listarCarrinhoPorId(req, res, next) {
         let carrinhoEncontrado = null
         try {
@@ -37,8 +42,7 @@ class CarrinhoController {
                 req.params.id
             )
             if (carrinhoEncontrado == null) {
-                res.status(400).json("Carrinho não encontrado com este ID")
-                return
+                next(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
             }
             res.status(200).json(carrinhoEncontrado)
         } catch (erro) {
@@ -46,6 +50,7 @@ class CarrinhoController {
         }
     }
 
+    // @route PUT /carrinhos/:id
     static async atualizarCarrinho(req, res, next) {
         try {
             const carrinhoAntesDeAtualizar =
@@ -53,8 +58,11 @@ class CarrinhoController {
                     req.params.id,
                     req.body
                 )
+            if (carrinhoAntesDeAtualizar == null) {
+                next(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
+            }
             const clienteDoCarrinho =
-                await ClienteController.getClientePorIdDoCarrinho(req.params.id)
+                await ClienteController.getClientePorIdDoCarrinho(carrinhoAntesDeAtualizar.idCliente)
             ClienteController.atualizarCarrinhoDoClientePorId(
                 clienteDoCarrinho._id,
                 req.body
@@ -69,6 +77,7 @@ class CarrinhoController {
         }
     }
 
+    // @route DELETE /carrinhos/:id
     static async removerCarrinho(req, res, next) {
         try {
             const carrinhoRemovido =

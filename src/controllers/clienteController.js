@@ -1,18 +1,19 @@
 import cliente from "../models/cliente.js"
 
 class ClienteController {
-    static async listarClientes(req, res) {
+
+    // @route GET /clientes
+    static async listarClientes(req, res, next) {
         try {
             const listaClientes = await cliente.find({})
             res.status(200).json(listaClientes)
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na requisição de clientes`,
-            })
+            next(erro)
         }
     }
 
-    static async cadastrarCliente(req, res) {
+    // @route POST /clientes
+    static async cadastrarCliente(req, res, next) {
         try {
             const novoCliente = await cliente.create(req.body)
             res.status(201).json({
@@ -20,24 +21,22 @@ class ClienteController {
                 cliente: novoCliente,
             })
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha ao cadastrar cliente`,
-            })
+            next(erro)
         }
     }
 
-    static async listarClientePorId(req, res) {
+    // @route GET /clientes/:id
+    static async listarClientePorId(req, res, next) {
         try {
             const clienteEncontrado = await cliente.findById(req.params.id)
             res.status(200).json(clienteEncontrado)
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na requisição de cliente por id`,
-            })
+            next(erro)
         }
     }
 
-    static async atualizarCliente(req, res) {
+    // @route PUT /clientes/:id
+    static async atualizarCliente(req, res, next) {
         try {
             const clienteAtualizado = await cliente.findByIdAndUpdate(
                 req.params.id,
@@ -48,13 +47,12 @@ class ClienteController {
                 cliente: clienteAtualizado,
             })
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na atualização de cliente`,
-            })
+            next(erro)
         }
     }
 
-    static async removerCliente(req, res) {
+    // @route DELETE /clientes/:id
+    static async removerCliente(req, res, next) {
         try {
             const clienteRemovido = await cliente.findByIdAndDelete(
                 req.params.id
@@ -64,9 +62,7 @@ class ClienteController {
                 cliente: clienteRemovido,
             })
         } catch (erro) {
-            res.status(500).json({
-                message: `${erro.message} - falha na remoção de cliente`,
-            })
+            next(erro)
         }
     }
 

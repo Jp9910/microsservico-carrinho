@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose"
+import mongoose from "mongoose"
 import "dotenv/config"
 
 const db_name = process.env.db_name
