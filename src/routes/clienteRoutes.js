@@ -6,6 +6,8 @@ import ClienteController from "../controllers/clienteController.js"
 const rotasCliente = express.Router()
 
 rotasCliente.get("/clientes", ClienteController.listarClientes)
+// Definir o /clientes/busca antes do /clientes/:id pra não considerar /busca como um id
+rotasCliente.get("/clientes/busca", ClienteController.listarClientesPorBusca)
 rotasCliente.get("/clientes/:id", ClienteController.listarClientePorId)
 rotasCliente.post("/clientes", ClienteController.cadastrarCliente)
 rotasCliente.put("/clientes/:id", ClienteController.atualizarCliente)

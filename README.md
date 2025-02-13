@@ -4,8 +4,9 @@ Ferramentas usadas:
 
 - Nodejs
 - Express
+- MongoDB e Mongoose
 
-## Executar:
+## Para rodar o serviço:
 
 ##### Criar arquivo .env para conexão com bd mongo no Atlas
 
@@ -18,3 +19,7 @@ Ferramentas usadas:
 > docker-compose up --build
 
 Acessar localhost:80
+
+## Executar a formatação de código na pasta src do projeto:
+
+> npx prettier ./src --write

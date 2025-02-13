@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import modelCarrinho from "./carrinho.js"
+import "./validadorGlobalMongoose.js"
 
 const clienteSchema = new mongoose.Schema(
     {
@@ -14,3 +15,6 @@ const clienteSchema = new mongoose.Schema(
 const cliente = mongoose.model("clientes", clienteSchema)
 
 export default cliente
+
+// Caso o carrinho fosse uma referência, em vez de embedded, poderia ser usado o método .find().populate() para fazer "um join" automático
+// com a tabela de carrinhos e trazer toda a informação do carrinho com aquele ID

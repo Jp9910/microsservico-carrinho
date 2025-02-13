@@ -1,12 +1,40 @@
 import cliente from "../models/cliente.js"
+import ErroBadRequest from "../erros/ErroBadRequest.js"
 
 class ClienteController {
-
     // @route GET /clientes
     static async listarClientes(req, res, next) {
         try {
-            const listaClientes = await cliente.find({})
+            // essa paginação pode ser feita em forma de middleware para reaproveitar o código em outras rotas, passando
+            // a informação da query no objeto request (req)
+            let { limite = 5, pagina = 1, ordenarPor = "_id", ordem = -1 } = req.query // queries para paginação
+            limite = parseInt(limite)
+            pagina = parseInt(pagina)
+            ordem = parseInt(ordem)
+
+            if (pagina < 1 || limite < 1) {
+                throw new ErroBadRequest()
+            }
+            const listaClientes = await cliente
+                .find() // pegar todos os documentos
+                .sort({[ordenarPor] : ordem}) // colocar a variavel entre [] permite usa-la como variável pra nomear a propriedade do objeto
+                .skip((pagina - 1) * limite) // pular certa quantidade de documentos de acordo com a paginação
+                .limit(limite) // pegar apenas X quantidade de documentos
             res.status(200).json(listaClientes)
+        } catch (erro) {
+            next(erro)
+        }
+    }
+
+    // @route GET /clientes/busca
+    static async listarClientesPorBusca(req, res, next) {
+        //Operadores do mongoose: https://www.mongodb.com/docs/manual/reference/operator/query/
+        try {
+            const busca = {
+                email: { $regex: req.query.email, $options: "i" },
+            }
+            const clientesResultado = await cliente.find(busca)
+            res.status(200).send(clientesResultado)
         } catch (erro) {
             next(erro)
         }
