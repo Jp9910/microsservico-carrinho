@@ -3,6 +3,8 @@ import ErroBadRequest from "../erros/ErroBadRequest"
 import { NextFunction, Request, Response } from "express"
 import { Document, Types } from "mongoose"
 
+// CLIENTE não está sendo usado no sistema, mas vou deixar aqui pq tem algumas funções
+// interessantes implementadas que talvez possam ser aproveitadas depois em outro controller
 class ClienteController {
     // @route GET /clientes
     static async listarClientes(req: Request, res: Response, next: NextFunction) {

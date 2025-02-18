@@ -40,7 +40,7 @@ const carrinhoSchema = new mongoose.Schema<ICarrinho>(
             }
         },
     },
-    { versionKey: false }
+    { timestamps: true /* ,versionKey: false */ } // sobre versionamento no mongoose: https://aaronheckmann.blogspot.com/2012/06/mongoose-v3-part-1-versioning.html
 )
 
 const carrinho = mongoose.model<ICarrinho>("carrinhos", carrinhoSchema)

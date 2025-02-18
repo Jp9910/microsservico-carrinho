@@ -30,7 +30,7 @@ const pedidoSchema = new mongoose.Schema<IPedido>(
             }
         },
     },
-    { versionKey: false }
+    { timestamps: { createdAt: true, updatedAt: false } }
 )
 
 const pedido = mongoose.model("pedidos", pedidoSchema)

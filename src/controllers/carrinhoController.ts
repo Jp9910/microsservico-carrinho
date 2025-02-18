@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import ErroNaoEncontrado from "../erros/ErroNaoEncontrado"
 import modelCarrinho from "../models/carrinho"
-import ClienteController from "./clienteController"
 
 class CarrinhoController {
 
@@ -27,10 +26,10 @@ class CarrinhoController {
             const novoCarrinho = await modelCarrinho.carrinho.create(req.body) //precisa remover o campo de cliente?
 
             // Encontrar o cliente da request e associa-lo ao carrinho
-            ClienteController.atualizarCarrinhoDoClientePorEmail(
-                req.body.emailCliente,
-                novoCarrinho
-            )
+            // ClienteController.atualizarCarrinhoDoClientePorEmail(
+            //     req.body.emailCliente,
+            //     novoCarrinho
+            // )
 
             res.status(201).json({
                 message: "Carrinho criado com sucesso.",
@@ -68,16 +67,17 @@ class CarrinhoController {
             if (carrinhoAntesDeAtualizar == null) {
                 next(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
             }
-            const clienteDoCarrinho =
-                await ClienteController.getClientePorIdDoCarrinho(carrinhoAntesDeAtualizar?.id)
 
+            // Atualizar o subdocument do cliente que contém o carrinho
+            // const clienteDoCarrinho =
+            //     await ClienteController.getClientePorIdDoCarrinho(carrinhoAntesDeAtualizar?.id)
+            // if (clienteDoCarrinho) {
+            //     ClienteController.atualizarCarrinhoDoClientePorId(
+            //         clienteDoCarrinho._id,
+            //         req.body
+            //     )
+            // }
 
-            if (clienteDoCarrinho) {
-                ClienteController.atualizarCarrinhoDoClientePorId(
-                    clienteDoCarrinho._id,
-                    req.body
-                )
-            }
             res.status(200).json({
                 message:
                     "Carrinho atualizado com sucesso. Segue o carrinho antigo:",
@@ -93,6 +93,10 @@ class CarrinhoController {
         try {
             const carrinhoRemovido =
                 await modelCarrinho.carrinho.findByIdAndDelete(req.params.id)
+
+            // Remover o subdocument do cliente que contém o carrinho
+            // ...
+
             res.status(200).json({
                 message: "Carrinho removido com sucesso.",
                 carrinho: carrinhoRemovido,
