@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
-import modelCarrinho from "./carrinho.js"
-import "./validadorGlobalMongoose.js"
+import modelCarrinho from "./carrinho"
+import "./validadorGlobalMongoose"
 
 const clienteSchema = new mongoose.Schema(
     {

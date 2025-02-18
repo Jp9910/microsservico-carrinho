@@ -1,11 +1,12 @@
 import mongoose from "mongoose"
-import "./validadorGlobalMongoose.js"
+import "./validadorGlobalMongoose"
+import IPedido from "../types/pedido";
 
-const pedidoSchema = new mongoose.Schema(
+const pedidoSchema = new mongoose.Schema<IPedido>(
     {
         id: { type: mongoose.Schema.Types.ObjectId },
-        produtos: {
-            type: mongoose.Schema.Types.Array,
+        produtos: { // poderia simplesmente ser uma referência ao carrinho... mas parece errado
+            type: [],
             required: [true, "Array de produtos obrigatório para cadastrar um pedido"],
             validate: {
                 validator: function () {
@@ -22,12 +23,10 @@ const pedidoSchema = new mongoose.Schema(
             validate: {
                 validator: function(valor) {
                     // eslint-disable-next-line no-useless-escape
-                    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                    const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
                     return re.test(valor)
                 },
-                message: "Email fornecido '{VALUE}' é inválido",
-                // eslint-disable-next-line no-useless-escape
-                match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Preencha um email válido']
+                message: "Email fornecido '{VALUE}' é inválido"
             }
         },
     },

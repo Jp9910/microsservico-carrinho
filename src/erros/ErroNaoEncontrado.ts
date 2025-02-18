@@ -1,4 +1,4 @@
-import ErroGenerico from "./ErroGenerico.js";
+import ErroGenerico from "./ErroGenerico";
 
 class ErroNaoEncontrado extends ErroGenerico {
 

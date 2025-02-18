@@ -1,19 +1,19 @@
 import mongoose from "mongoose"
 import "dotenv/config"
 
-const db_name = process.env.db_name
-var connectionString = ""
+const db_name: string|undefined = process.env.db_name
+let connectionString: string = ""
 
 if (process.env.db_location === "atlas") {
-    const password = process.env.atlas_db_password
-    const user = process.env.atlas_db_username
+    const password: string|undefined = process.env.atlas_db_password
+    const user: string|undefined  = process.env.atlas_db_username
     connectionString = "".concat(
         "mongodb+srv://",
-        user,
+        user!,
         ":",
-        password,
+        password!,
         "@cluster0.y8dl2.mongodb.net/",
-        db_name,
+        db_name!,
         "?retryWrites=true&w=majority&appName=Cluster0"
     )
 }
@@ -22,18 +22,18 @@ if (process.env.db_location === "local") {
     const user = process.env.local_db_username
     const password = process.env.local_db_password
     const host = process.env.local_db_container_name
-    const port = 27017
+    const port = "27017"
     connectionString = "".concat(
         "mongodb://",
-        user,
+        user!,
         ":",
-        password,
+        password!,
         "@",
-        host,
+        host!,
         ":",
         port,
         "/",
-        db_name,
+        db_name!,
         "?authSource=admin"
     )
     //mongodb://username:password@host:port/database?options

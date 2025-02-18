@@ -2,10 +2,11 @@ import mongoose from "mongoose"
 import ErroGenerico from "../erros/ErroGenerico.js"
 import ErroDeValidacao from "../erros/ErroDeValidacao.js"
 import ErroBadRequest from "../erros/ErroBadRequest.js"
+import { NextFunction, Request, Response, ErrorRequestHandler } from "express"
 
 // Middleware especial do Express caracterizado por receber quatro parâmetros. (erro, req, res e next)
-// eslint-disable-next-line no-unused-vars
-function tratadorDeErros(erro, req, res, next) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function tratadorDeErros(erro:ErrorRequestHandler, req: Request, res: Response, next: NextFunction) {
     if (erro instanceof mongoose.Error.CastError) {
         new ErroBadRequest().enviarResposta(res)
     } else if (erro instanceof mongoose.Error.ValidationError) {

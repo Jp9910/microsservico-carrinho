@@ -1,18 +1,25 @@
-import express from "express"
-import conectarBD from "./config/dbconnect.js"
-import rotas from "./routes/index.js"
-import tratadorDeErros from "./middlewares/tratadorDeErros.js"
-import rotaNotFound from "./middlewares/rotaNotFound.js"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import express, { Application } from "express"
+import conectarBD from "./config/dbconnect"
+import rotas from "./routes/index"
+import tratadorDeErros from "./middlewares/tratadorDeErros"
+import rotaNotFound from "./middlewares/rotaNotFound"
+import { Connection } from "mongoose"
 
-const conexao = await conectarBD()
-conexao.on("error", (erro) => {
-    console.error("Erro de conexão com o mongo", erro)
-})
-conexao.once("open", () => {
-    console.log("Conectado com o mongo")
-})
+async function conectar() {
+    const conexao = await conectarBD()
+    conexao.on("error", (erro) => {
+        console.error("Erro de conexão com o mongo", erro)
+    })
+    conexao.once("open", () => {
+        console.log("Conectado com o mongo")
+    })
+}
+conectar().catch(err => console.log(err));;
 
-const app = express()
+
+// app: express.Express seria a mesma coisa?
+const app: Application = express()
 
 // Registrar (middleware) que ligará as rotas aos métodos dos controllers
 rotas(app)

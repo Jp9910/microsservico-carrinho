@@ -1,10 +1,11 @@
-import ErroNaoEncontrado from "../erros/ErroNaoEncontrado.js"
+import { NextFunction, Request, Response } from "express"
+import ErroNaoEncontrado from "../erros/ErroNaoEncontrado"
 import pedido from "../models/pedido.js"
 
 class PedidoController {
 
     // @route POST /pedidos
-    static async cadastrarPedido(req, res, next) {
+    static async cadastrarPedido(req: Request, res: Response, next: NextFunction) {
         console.log(req.body)
         try {
             const novoPedido = await pedido.create(req.body)
@@ -18,7 +19,7 @@ class PedidoController {
     }
 
     // @route GET /pedidos
-    static async getPedidosPorEmail(req, res, next) {
+    static async getPedidosPorEmail(req: Request, res: Response, next: NextFunction) {
         let pedidos = []
         try {
             pedidos = await pedido.find({"emailCliente": req.query.emailCliente})
@@ -29,7 +30,7 @@ class PedidoController {
     }
 
     // @route GET /pedidos/:id
-    static async getPedidoPorId(req, res, next) {
+    static async getPedidoPorId(req: Request, res: Response, next: NextFunction) {
         let pedidoEncontrado = null
         try {
             pedidoEncontrado = await pedido.findById(

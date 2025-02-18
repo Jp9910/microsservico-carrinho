@@ -1,11 +1,18 @@
-import ErroNaoEncontrado from "../erros/ErroNaoEncontrado.js"
-import modelCarrinho from "../models/carrinho.js"
-import ClienteController from "./clienteController.js"
+import { NextFunction, Request, Response } from "express"
+import ErroNaoEncontrado from "../erros/ErroNaoEncontrado"
+import modelCarrinho from "../models/carrinho"
+import ClienteController from "./clienteController"
 
 class CarrinhoController {
 
     // @route GET /carrinhos
-    static async listarCarrinhos(req, res, next) {
+    
+    /**
+     * @param {express.Request} req
+     * @param {express.Response} res
+     * @param {express.NextFunction} next
+     */
+    static async listarCarrinhos(req: Request, res: Response, next: NextFunction) {
         try {
             const listaCarrinhos = await modelCarrinho.carrinho.find({})
             res.status(200).json(listaCarrinhos)
@@ -15,13 +22,13 @@ class CarrinhoController {
     }
 
     // @route POST /carrinhos
-    static async cadastrarCarrinho(req, res, next) {
+    static async cadastrarCarrinho(req: Request, res: Response, next: NextFunction) {
         try {
             const novoCarrinho = await modelCarrinho.carrinho.create(req.body) //precisa remover o campo de cliente?
 
             // Encontrar o cliente da request e associa-lo ao carrinho
-            ClienteController.atualizarCarrinhoDoClientePorCpf(
-                req.body.cpf_cliente,
+            ClienteController.atualizarCarrinhoDoClientePorEmail(
+                req.body.emailCliente,
                 novoCarrinho
             )
 
@@ -35,7 +42,7 @@ class CarrinhoController {
     }
 
     // @route GET /carrinhos/:id
-    static async listarCarrinhoPorId(req, res, next) {
+    static async listarCarrinhoPorId(req: Request, res: Response, next: NextFunction) {
         let carrinhoEncontrado = null
         try {
             carrinhoEncontrado = await modelCarrinho.carrinho.findById(
@@ -51,7 +58,7 @@ class CarrinhoController {
     }
 
     // @route PUT /carrinhos/:id
-    static async atualizarCarrinho(req, res, next) {
+    static async atualizarCarrinho(req: Request, res: Response, next: NextFunction) {
         try {
             const carrinhoAntesDeAtualizar =
                 await modelCarrinho.carrinho.findByIdAndUpdate(
@@ -62,11 +69,15 @@ class CarrinhoController {
                 next(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
             }
             const clienteDoCarrinho =
-                await ClienteController.getClientePorIdDoCarrinho(carrinhoAntesDeAtualizar.idCliente)
-            ClienteController.atualizarCarrinhoDoClientePorId(
-                clienteDoCarrinho._id,
-                req.body
-            )
+                await ClienteController.getClientePorIdDoCarrinho(carrinhoAntesDeAtualizar?.id)
+
+
+            if (clienteDoCarrinho) {
+                ClienteController.atualizarCarrinhoDoClientePorId(
+                    clienteDoCarrinho._id,
+                    req.body
+                )
+            }
             res.status(200).json({
                 message:
                     "Carrinho atualizado com sucesso. Segue o carrinho antigo:",
@@ -78,7 +89,7 @@ class CarrinhoController {
     }
 
     // @route DELETE /carrinhos/:id
-    static async removerCarrinho(req, res, next) {
+    static async removerCarrinho(req: Request, res: Response, next: NextFunction) {
         try {
             const carrinhoRemovido =
                 await modelCarrinho.carrinho.findByIdAndDelete(req.params.id)
@@ -93,3 +104,34 @@ class CarrinhoController {
 }
 
 export default CarrinhoController
+
+
+
+/**
+ * Documentação de funções de controller:
+ * (fonte: https://stackoverflow.com/questions/27266857/how-to-annotate-express-middlewares-with-jsdoc)
+ * 
+ * 
+ * Com Javascript:
+ * 
+ * @param {express.Request} req
+ * @param {express.Response} res
+ * @param {express.NextFunction} next
+ *
+ * 
+ * 
+ * Com Typescript:
+ * 
+ * @typedef {object} showRequestBody
+ * @property {string} name this is name in request body
+ * @property {number} age this is age in request body
+ * 
+ * @typedef {object} showRequestQuery
+ * @property {string} name this is name in query
+ * @property {number} age this is age in query
+ * 
+ * @param {import('express').Request<{}, {}, showRequestBody, showRequestQuery>} req
+ * @param {import('express').Response} res 
+ * @param {import('express').NextFunction} next 
+ *
+ */
