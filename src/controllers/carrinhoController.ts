@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import ErroNaoEncontrado from "../erros/ErroNaoEncontrado"
 import modelCarrinho from "../models/carrinho"
+import IPedidoEnviado from "../types/pedidoEnviado"
+import Mensageiro from "../mensageria/mensageiro"
 
 class CarrinhoController {
 
@@ -15,6 +17,26 @@ class CarrinhoController {
         try {
             const listaCarrinhos = await modelCarrinho.carrinho.find({})
             res.status(200).json(listaCarrinhos)
+        } catch (erro) {
+            next(erro)
+        }
+    }
+
+    // @route POST /comprarCarrinho/:id
+    static async comprarCarrinho(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log("Pedido Recebido");
+            const carrinho = await modelCarrinho.carrinho.findById(req.params.id)
+            if (carrinho == null) {
+                throw(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
+            }
+            const pedido = {emailCliente: carrinho?.emailCliente, produtos: carrinho?.produtos} as IPedidoEnviado
+            await Mensageiro.Instance.enviarPedido(pedido)
+            // await carrinho?.deleteOne(); // da pra deletar ou apenas setar "comprado" pra true
+            res.status(200).json({
+                message: "Compra está sendo processada.",
+                pedido: pedido,
+            })
         } catch (erro) {
             next(erro)
         }
@@ -48,7 +70,7 @@ class CarrinhoController {
                 req.params.id
             )
             if (carrinhoEncontrado == null) {
-                next(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
+                throw(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
             }
             res.status(200).json(carrinhoEncontrado)
         } catch (erro) {
@@ -65,7 +87,7 @@ class CarrinhoController {
                     req.body
                 )
             if (carrinhoAntesDeAtualizar == null) {
-                next(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
+                throw(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
             }
 
             // Atualizar o subdocument do cliente que contém o carrinho

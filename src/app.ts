@@ -4,7 +4,7 @@ import conectarBD from "./config/dbconnect"
 import rotas from "./routes/index"
 import tratadorDeErros from "./middlewares/tratadorDeErros"
 import rotaNotFound from "./middlewares/rotaNotFound"
-import { Connection } from "mongoose"
+
 
 async function conectar() {
     const conexao = await conectarBD()

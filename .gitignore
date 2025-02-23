@@ -1,5 +1,6 @@
 node_modules/
 .env
+.env.local
 mongo-container.env
 rabbitmq-container.env
 dist/

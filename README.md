@@ -6,20 +6,20 @@ Ferramentas usadas:
 - Express
 - MongoDB e Mongoose
 
-## Para rodar o serviço:
+## Iniciar o serviço localmente (BD no Atlas):
+- Criar arquivo `.env` para conexão com bd mongo no Atlas, de acordo com o arquivo `.env.example`;
 
-##### Criar arquivo .env para conexão com bd mongo no Atlas
+- Criar arquivo rabbitmq-container.env para conexão com container do RabbitMQ, de acordo com o arquivo `rabbitmq-container.env.example`
 
-##### Criar arquivo mongo-container.env para conexão com bd mongo em container
+- Executar `npm run dev`
 
-##### Criar arquivo rabbitmq-container.env com
+## Iniciar todos os serviços localmente usando containers (BD em container local):
+- Criar arquivo `.env.local`, de acordo com o arquivo `.env.local.example`; **E**
 
-##### Iniciar compose
+- Criar arquivo `mongo-container.env` para conexão com bd mongo em container, de acordo com o arquivo `mongo-container.env.example`
 
-> docker-compose up --build
+- Executar `docker-compose up -d`
 
-Acessar localhost:80
-
-## Executar a formatação de código na pasta src do projeto:
+#### Executar a formatação de código na pasta src do projeto:
 
 > npx prettier ./src --write

@@ -6,6 +6,7 @@ const rotasCarrinho = express.Router()
 rotasCarrinho.get("/carrinhos", CarrinhoController.listarCarrinhos)
 rotasCarrinho.get("/carrinhos/:id", CarrinhoController.listarCarrinhoPorId)
 rotasCarrinho.post("/carrinhos", CarrinhoController.cadastrarCarrinho)
+rotasCarrinho.post("/carrinhos/comprar/:id", CarrinhoController.comprarCarrinho)
 rotasCarrinho.put("/carrinhos/:id", CarrinhoController.atualizarCarrinho)
 rotasCarrinho.delete("/carrinhos/:id", CarrinhoController.removerCarrinho)
 
