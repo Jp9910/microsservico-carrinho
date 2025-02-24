@@ -30,7 +30,13 @@ class CarrinhoController {
             if (carrinho == null) {
                 throw(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
             }
-            const pedido = {emailCliente: carrinho?.emailCliente, produtos: carrinho?.produtos} as IPedidoEnviado
+
+            const arrayDeIds: Array<number> = [];
+            carrinho?.produtos.forEach(produto => {
+                arrayDeIds.push(produto.id)
+            });
+
+            const pedido = {EmailCliente: carrinho?.emailCliente, IdsProdutos: arrayDeIds, IdCarrinho: carrinho._id.toString()} as IPedidoEnviado
             await Mensageiro.Instance.enviarPedido(pedido)
             // await carrinho?.deleteOne(); // da pra deletar ou apenas setar "comprado" pra true
             res.status(200).json({

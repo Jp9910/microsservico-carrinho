@@ -12,8 +12,8 @@ export default class Mensageiro {
     jaEstaTentandoReconectar = false; // essa flag teria que ser um mutex, mas aí ja foge do escopo do projeto
     jaEstaTentandoRecriarCanal = false;
     bufferDeMensagens: IPedidoEnviado[] = [];
-    fila = "pedidos";
-    exchange = "pedidos";
+    fila = "filaPedidosFeitos";
+    exchange = "exchangePedidosFeitos";
     tentativaConexao = 0;
     parametrosConexao: Options.Connect = {
         protocol: 'amqp',
@@ -46,7 +46,7 @@ export default class Mensageiro {
             return this.criarCanal();
         }
 
-        this.canal!.publish(this.exchange, "", Buffer.from(JSON.stringify(pedido),), { persistent: true });
+        this.canal!.publish(this.exchange, "", Buffer.from(JSON.stringify(pedido)), { persistent: true });
         console.log("✅ Mensagem enviada: ", pedido);
     }
 

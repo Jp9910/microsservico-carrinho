@@ -26,6 +26,13 @@ services:
   rabbitmq:
     image: rabbitmq:3.13-management
     env_file: "rabbitmq-container.env"
+    # volumes:
+    #   - rabbitmq-data:/var/lib/rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
+
+# volumes:
+#   rabbitmq-data:
+#     # external: true
+#     name: rabbitmq-data

@@ -4,9 +4,11 @@ import conectarBD from "./config/dbconnect"
 import rotas from "./routes/index"
 import tratadorDeErros from "./middlewares/tratadorDeErros"
 import rotaNotFound from "./middlewares/rotaNotFound"
+import startConsumidorDeFilas from './mensageria/consumidor';
 
+startConsumidorDeFilas(); // basta não usar o await na função que ela já roda como se fosse numa outra thread
 
-async function conectar() {
+async function conectarComBancoDeDados() {
     const conexao = await conectarBD()
     conexao.on("error", (erro) => {
         console.error("Erro de conexão com o mongo", erro)
@@ -15,7 +17,7 @@ async function conectar() {
         console.log("Conectado com o mongo")
     })
 }
-conectar().catch(err => console.log(err));;
+conectarComBancoDeDados().catch(err => console.log(err));;
 
 
 // app: express.Express seria a mesma coisa?
