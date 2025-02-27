@@ -6,7 +6,7 @@ import tratadorDeErros from "./middlewares/tratadorDeErros"
 import rotaNotFound from "./middlewares/rotaNotFound"
 import startConsumidorDeFilas from './mensageria/consumidor';
 
-startConsumidorDeFilas(); // basta não usar o await na função que ela já roda como se fosse numa outra thread
+// startConsumidorDeFilas(); // basta não usar o await na função que ela já roda como se fosse numa outra thread
 
 async function conectarComBancoDeDados() {
     const conexao = await conectarBD()

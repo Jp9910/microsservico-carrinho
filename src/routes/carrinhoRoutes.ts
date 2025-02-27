@@ -4,6 +4,7 @@ import CarrinhoController from "../controllers/carrinhoController"
 const rotasCarrinho = express.Router()
 
 rotasCarrinho.get("/carrinhos", CarrinhoController.listarCarrinhos)
+rotasCarrinho.get("/carrinhos/buscar", CarrinhoController.listarCarrinhoPorEmailOuCookie)
 rotasCarrinho.get("/carrinhos/:id", CarrinhoController.listarCarrinhoPorId)
 rotasCarrinho.post("/carrinhos", CarrinhoController.cadastrarCarrinho)
 rotasCarrinho.post("/carrinhos/comprar/:id", CarrinhoController.comprarCarrinho)

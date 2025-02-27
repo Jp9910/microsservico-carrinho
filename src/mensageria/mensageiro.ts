@@ -11,7 +11,7 @@ export default class Mensageiro {
     canal: amqp.Channel|null = null;
     jaEstaTentandoReconectar = false; // essa flag teria que ser um mutex, mas aí ja foge do escopo do projeto
     jaEstaTentandoRecriarCanal = false;
-    bufferDeMensagens: IPedidoEnviado[] = [];
+    bufferDeMensagens: IPedidoEnviado[] = []; // poderia salvar esse buffer num arquivo pra garantir que não vai perder os dados caso o processo caia
     fila = "filaPedidosFeitos";
     exchange = "exchangePedidosFeitos";
     tentativaConexao = 0;
@@ -98,6 +98,7 @@ export default class Mensageiro {
             return this.recriarCanal();
         }
 
+        // >>Importante: Canais geralmente só falham por falhas lógicas de programação, então talvez seja até melhor não tentar recriar o canal.
         this.canal.on("error", (err) => {
             console.error("🔴 Erro no canal:", err.message);
             this.recriarCanal();

@@ -3,6 +3,7 @@ import ErroNaoEncontrado from "../erros/ErroNaoEncontrado"
 import modelCarrinho from "../models/carrinho"
 import IPedidoEnviado from "../types/pedidoEnviado"
 import Mensageiro from "../mensageria/mensageiro"
+import ErroBadRequest from "../erros/ErroBadRequest"
 
 class CarrinhoController {
 
@@ -43,6 +44,24 @@ class CarrinhoController {
                 message: "Compra está sendo processada.",
                 pedido: pedido,
             })
+        } catch (erro) {
+            next(erro)
+        }
+    }
+
+    static async listarCarrinhoPorEmailOuCookie(req: Request, res: Response, next: NextFunction) {
+        try {
+            const email = req.query.emailCliente || req.query.email
+            const cookie = req.query.cookieCliente || req.query.cookie
+
+            if (!email && !cookie) throw new ErroBadRequest("Nenhum email ou cookie foi passado na requisição")
+
+            const busca = email ? {emailCliente : email} : {cookieCliente : cookie}
+            console.log(busca)
+
+            const carrinho = await modelCarrinho.carrinho.findOne(busca)
+            if (carrinho == null) throw(new ErroNaoEncontrado("Nenhum carrinho associado a este email ou cookie"))
+            res.status(200).json(carrinho)
         } catch (erro) {
             next(erro)
         }

@@ -1,8 +1,8 @@
 import ErroGenerico from "./ErroGenerico";
 
 class ErroBadRequest extends ErroGenerico {
-    constructor () {
-        super("Dados fornecidos estão incorretos", 400)
+    constructor (erro:string = "Dados fornecidos estão incorretos") {
+        super(erro, 400)
     }
 }
 

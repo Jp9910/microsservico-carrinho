@@ -53,6 +53,12 @@ export default async function startConsumidor() {
                 canal.ack(msg);
             }
         }, { noAck: false });
+        /**
+         * Sobre o noAck:
+         * if true, the broker won’t expect an acknowledgement of messages delivered to this
+         * consumer; i.e., it will dequeue messages as soon as they’ve been sent down the wire. 
+         * Defaults to false (i.e., you will be expected to acknowledge messages).
+         */
 
     } catch (error:unknown) {
         console.error('🔴 [Consumidor] Erro:', error);
