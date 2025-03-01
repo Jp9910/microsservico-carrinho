@@ -5,8 +5,9 @@ import rotas from "./routes/index"
 import tratadorDeErros from "./middlewares/tratadorDeErros"
 import rotaNotFound from "./middlewares/rotaNotFound"
 import startConsumidorDeFilas from './mensageria/consumidor';
+import cors from "cors"
 
-// startConsumidorDeFilas(); // basta não usar o await na função que ela já roda como se fosse numa outra thread
+startConsumidorDeFilas(); // basta não usar o await na função que ela já roda como se fosse numa outra thread
 
 async function conectarComBancoDeDados() {
     const conexao = await conectarBD()
@@ -22,6 +23,13 @@ conectarComBancoDeDados().catch(err => console.log(err));;
 
 // app: express.Express seria a mesma coisa?
 const app: Application = express()
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: "*",
+    allowedHeaders: "*"
+}))
+
 
 // Registrar (middleware) que ligará as rotas aos métodos dos controllers
 rotas(app)

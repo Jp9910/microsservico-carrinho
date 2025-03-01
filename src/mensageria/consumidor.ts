@@ -48,8 +48,8 @@ export default async function startConsumidor() {
                 const msgCarrinhoComprado: IMensagemCarrinhoComprado = JSON.parse(conteudo);
                 console.log("id carrinho recebido:",msgCarrinhoComprado.IdCarrinho);
                 // Em vez de só buscar, o carrinho deve ser deletado. Mas por enquanto vou deixar assim pra n ter que ficar criando outro
-                const carrinhoRemovido = await modelCarrinho.carrinho.findById(msgCarrinhoComprado.IdCarrinho)
-                console.log("carrinho a ser removido:", carrinhoRemovido);
+                const carrinhoRemovido = await modelCarrinho.carrinho.findByIdAndDelete(msgCarrinhoComprado.IdCarrinho)
+                console.log("Carrinho removido:", carrinhoRemovido);
                 canal.ack(msg);
             }
         }, { noAck: false });

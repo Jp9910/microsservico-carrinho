@@ -12,8 +12,8 @@ const carrinhoSchema = new mongoose.Schema<ICarrinho>(
             type: mongoose.Schema.Types.String,
             required: [
                 function () {
-                    console.log("email: "+this.emailCliente)
-                    console.log("!this.emailCliente: "+!this.emailCliente)
+                    // console.log("email: "+this.emailCliente)
+                    // console.log("!this.emailCliente: "+!this.emailCliente)
                     return !this.emailCliente
                 },
                 "Cookie do cliente obrigatório caso não tenha email",
@@ -25,8 +25,8 @@ const carrinhoSchema = new mongoose.Schema<ICarrinho>(
             lowercase: true,
             required: [
                 function () {
-                    console.log("cookie: "+this.cookieCliente)
-                    console.log("!this.cookieCliente: "+!this.cookieCliente)
+                    // console.log("cookie: "+this.cookieCliente)
+                    // console.log("!this.cookieCliente: "+!this.cookieCliente)
                     return !this.cookieCliente
                 },
                 "Email obrigatório caso não tenha cookie do cliente",

@@ -54,14 +54,66 @@ class CarrinhoController {
             const email = req.query.emailCliente || req.query.email
             const cookie = req.query.cookieCliente || req.query.cookie
 
-            if (!email && !cookie) throw new ErroBadRequest("Nenhum email ou cookie foi passado na requisição")
+            // if (!email && !cookie) throw new ErroBadRequest("Nenhum email ou cookie foi passado na requisição")
+            if (!email && !cookie) {
+                res.status(200).json(null)
+                return
+            }
 
             const busca = email ? {emailCliente : email} : {cookieCliente : cookie}
-            console.log(busca)
-
+            // console.log(busca)
             const carrinho = await modelCarrinho.carrinho.findOne(busca)
-            if (carrinho == null) throw(new ErroNaoEncontrado("Nenhum carrinho associado a este email ou cookie"))
+            // if (carrinho == null) throw(new ErroNaoEncontrado("Nenhum carrinho associado a este email ou cookie"))
             res.status(200).json(carrinho)
+        } catch (erro) {
+            next(erro)
+        }
+    }
+
+    // @route POST /carrinhos/adicionarProduto
+    static async adicionarProduto(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log("Adicionar produto")
+            // console.log(req.body)
+            const email = req.body.emailCliente || req.body.email
+            const cookie = req.body.cookieCliente || req.body.cookie
+            // if (!email && !cookie) throw new ErroBadRequest("Nenhum email ou cookie foi passado na requisição")
+            if (!email && !cookie) {
+                throw(new ErroBadRequest("Nenhum email ou cookie foi passado na requisição"))
+            }
+            const busca = email ? {emailCliente : email} : {cookieCliente : cookie}
+            // console.log(busca)
+            let carrinho = await modelCarrinho.carrinho.findOne(busca)
+            if (carrinho == null) {
+                // criar novo carrinho com nenhum produto
+                carrinho = await modelCarrinho.carrinho.create({
+                    emailCliente: email, 
+                    cookieCliente: cookie,
+                    produtos: []
+                })
+            }
+            // adicionar o produto ao carrinho
+            carrinho.produtos.push(req.body.produto)
+            carrinho.save()
+            res.status(200).json({
+                message:
+                    "Produto adicionado ao carrinho.",
+                carrinho: carrinho,
+            })
+        } catch (erro) {
+            next(erro)
+        }
+    }
+
+    /**
+     * @route PATCH /carrinhos/removerProduto
+     * @param req Express.Request
+     * @param res Express.Response
+     * @param next Express.NextFunction
+     */ 
+    static async removerProduto(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log("TODO: implementar remover produto do carrinho")
         } catch (erro) {
             next(erro)
         }
@@ -135,6 +187,52 @@ class CarrinhoController {
         }
     }
 
+    // @route PUT /carrinhos/sincronizarCarrinhos
+    static async sincronizarCarrinhos(req: Request, res: Response, next: NextFunction) {
+        try {
+            // TODO: Considerar o caso de ter carrinho por cookie, mas não ter por email
+            console.log("Sincronizar carrinhos")
+            const email = req.query.emailCliente || req.query.email
+            const cookie = req.query.cookieCliente || req.query.cookie
+            // console.log(email, cookie)
+            if (!email || !cookie) throw(new ErroBadRequest("Email e cookie são necessários para sincronizar os carrinhos"))
+
+            let mensagem = "Nenhuma ação necessária."
+
+            let carrinho
+            const carrinhoEmail = await modelCarrinho.carrinho.findOne({emailCliente : email})
+            const carrinhoCookie = await modelCarrinho.carrinho.findOne({cookieCliente : cookie})
+
+            if (carrinhoEmail && carrinhoCookie) {
+                // caso o email ja tenha carrinho, atualizar com o novo
+                carrinho = await modelCarrinho.carrinho.findOneAndUpdate(
+                    {emailCliente : email},
+                    req.body
+                )
+                if (carrinhoEmail._id != carrinhoCookie._id)
+                    await modelCarrinho.carrinho.findByIdAndDelete(carrinhoCookie._id)
+                mensagem = "Carrinho existente atualizado com o novo conteúdo"
+            }
+
+            if (!carrinhoEmail && carrinhoCookie) {
+                // caso o email não tenha carrinho, associar o email ao carrinho de cookie existente
+                console.log("Criando carrinho com email")
+                carrinho = await modelCarrinho.carrinho.findOneAndUpdate(
+                    {cookieCliente: cookie},
+                    req.body
+                )
+                mensagem = "Email associado ao carrinho existente."
+            }
+
+            res.status(200).json({
+                message: mensagem,
+                carrinhoAntigo: carrinho,
+            })
+        } catch (erro) {
+            next(erro)
+        }
+    }
+
     // @route DELETE /carrinhos/:id
     static async removerCarrinho(req: Request, res: Response, next: NextFunction) {
         try {
@@ -147,6 +245,19 @@ class CarrinhoController {
             res.status(200).json({
                 message: "Carrinho removido com sucesso.",
                 carrinho: carrinhoRemovido,
+            })
+        } catch (erro) {
+            next(erro)
+        }
+    }
+
+
+    // @route DELETE /carrinhos/removerTodos
+    static async removerTodosOsCarrinhos(req: Request, res: Response, next: NextFunction) {
+        try {
+            await modelCarrinho.carrinho.deleteMany()
+            res.status(200).json({
+                message: "Todos os carrinhos foram removidos."
             })
         } catch (erro) {
             next(erro)
