@@ -202,15 +202,16 @@ class CarrinhoController {
             let carrinho
             const carrinhoEmail = await modelCarrinho.carrinho.findOne({emailCliente : email})
             const carrinhoCookie = await modelCarrinho.carrinho.findOne({cookieCliente : cookie})
-
+            console.log("carrinho cookie:",carrinhoCookie,"\ncarrinho email:", carrinhoEmail)
             if (carrinhoEmail && carrinhoCookie) {
                 // caso o email ja tenha carrinho, atualizar com o novo
                 carrinho = await modelCarrinho.carrinho.findOneAndUpdate(
                     {emailCliente : email},
                     req.body
                 )
-                if (carrinhoEmail._id != carrinhoCookie._id)
+                if (carrinhoEmail._id.toString() !== carrinhoCookie._id.toString()) {
                     await modelCarrinho.carrinho.findByIdAndDelete(carrinhoCookie._id)
+                }
                 mensagem = "Carrinho existente atualizado com o novo conteúdo"
             }
 
@@ -223,7 +224,8 @@ class CarrinhoController {
                 )
                 mensagem = "Email associado ao carrinho existente."
             }
-
+            
+            console.log(mensagem)
             res.status(200).json({
                 message: mensagem,
                 carrinhoAntigo: carrinho,
