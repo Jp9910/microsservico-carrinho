@@ -3,5 +3,6 @@ export default interface IProduto {
     nome: string,
     preco: number,
     imagem:string
+    //, linkImagem:string
     // no carrinho não precisa existir nem estoque nem descrição
 }

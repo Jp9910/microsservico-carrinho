@@ -7,7 +7,7 @@ import ICarrinho from "../types/carrinho"
 const carrinhoSchema = new mongoose.Schema<ICarrinho>(
     {
         id: { type: mongoose.Schema.Types.ObjectId, ref: "id" },
-        produtos: {type: []},
+        produtos: {type: []}, //array types/produto.ts
         cookieCliente: {
             type: mongoose.Schema.Types.String,
             required: [

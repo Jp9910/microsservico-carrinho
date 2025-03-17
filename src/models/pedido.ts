@@ -2,6 +2,8 @@ import mongoose from "mongoose"
 import "./validadorGlobalMongoose"
 import IPedido from "../types/pedido";
 
+// Essa classe não está sendo usada no sistema
+// Os pedidos estão sendo armazenados no microsserviço Loja
 const pedidoSchema = new mongoose.Schema<IPedido>(
     {
         id: { type: mongoose.Schema.Types.ObjectId },

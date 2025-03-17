@@ -205,6 +205,7 @@ class CarrinhoController {
             console.log("carrinho cookie:",carrinhoCookie,"\ncarrinho email:", carrinhoEmail)
             if (carrinhoEmail && carrinhoCookie) {
                 // caso o email ja tenha carrinho, atualizar com o novo
+                // (a prioridade é para o carrinho de cookie, pois provavelmente é o carrinho mais atual do usuario)
                 carrinho = await modelCarrinho.carrinho.findOneAndUpdate(
                     {emailCliente : email},
                     req.body
