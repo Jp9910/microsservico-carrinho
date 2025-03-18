@@ -4,7 +4,11 @@ import "dotenv/config"
 const db_name: string|undefined = process.env.db_name
 let connectionString: string = ""
 
+console.log("123")
+console.log(process.env.db_location)
+
 if (process.env.db_location === "atlas") {
+    console.log("Conectando em BD no atlas")
     const password: string|undefined = process.env.atlas_db_password
     const user: string|undefined  = process.env.atlas_db_username
     connectionString = "".concat(
@@ -19,6 +23,8 @@ if (process.env.db_location === "atlas") {
 }
 
 if (process.env.db_location === "local") {
+    console.log("Conectando em BD local")
+    console.log(process.env.local_db_username)
     const user = process.env.local_db_username
     const password = process.env.local_db_password
     const host = process.env.local_db_container_name
@@ -38,7 +44,7 @@ if (process.env.db_location === "local") {
     )
     //mongodb://username:password@host:port/database?options
 }
-
+console.log("456")
 async function conectarBD() {
     // console.log(connectionString)
     mongoose.connect(connectionString)

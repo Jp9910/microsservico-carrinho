@@ -113,7 +113,31 @@ class CarrinhoController {
      */ 
     static async removerProduto(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log("TODO: implementar remover produto do carrinho")
+            console.log("Remover produto")
+            // console.log(req.body)
+            const email = req.body.emailCliente || req.body.email
+            const cookie = req.body.cookieCliente || req.body.cookie
+            const idProduto = req.body.IdProduto
+            // if (!email && !cookie) throw new ErroBadRequest("Nenhum email ou cookie foi passado na requisição")
+            if (!email && !cookie) {
+                throw(new ErroBadRequest("Nenhum email ou cookie foi passado na requisição"))
+            }
+            if (!idProduto) {
+                throw(new ErroBadRequest("Nenhum id do produto foi passado na requisição"))
+            }
+            const busca = email ? {emailCliente : email} : {cookieCliente : cookie}
+            const carrinho = await modelCarrinho.carrinho.findOne(busca)
+            if (!carrinho) {
+                throw(new ErroNaoEncontrado("Carrinho não encontrado com este ID"))
+            }
+            // remover produto
+            carrinho.produtos = carrinho.produtos.filter((prod) => prod.id !== idProduto)
+            carrinho.save()
+            res.status(204).json({
+                message:
+                    "Produto removido do carrinho.",
+                carrinho: carrinho,
+            })
         } catch (erro) {
             next(erro)
         }
