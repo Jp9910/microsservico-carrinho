@@ -24,6 +24,8 @@ class CarrinhoController {
     }
 
     // @route POST /comprarCarrinho/:id
+    // Não está sendo usada. O pedido está sendo feito diretamente para loja
+    // Mas vou deixar aqui para referência futura de como implementar publicação de mensagem no javascript
     static async comprarCarrinho(req: Request, res: Response, next: NextFunction) {
         try {
             console.log("Pedido Recebido");

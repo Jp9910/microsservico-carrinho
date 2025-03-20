@@ -4,6 +4,9 @@ import { Options } from 'amqplib/properties';
 import IPedidoEnviado from '../types/pedidoEnviado';
 
 // RabbitMQ node tutorials: https://github.com/amqp-node/amqplib/tree/main/examples/tutorials
+
+// O Mensageiro não está sendo usado nesse projeto. O pedido está sendo feito diretamente para loja
+// Mas vou deixar aqui para referência futura de como implementar publicação de mensagem no javascript
 export default class Mensageiro {
 
     private static _instance: Mensageiro;
